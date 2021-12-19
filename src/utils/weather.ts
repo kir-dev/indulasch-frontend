@@ -3,10 +3,12 @@ import { Coordinates } from "./settings-context";
 const url = new URL("https://api.openweathermap.org/data/2.5/weather");
 
 export function getWeatherData({ lat, lon }: Coordinates) {
+  const apiKey = process.env.REACT_APP_OWM_API_KEY;
   url.searchParams.set("lat", lat.toString());
   url.searchParams.set("lon", lon.toString());
-  url.searchParams.set("appid", "4853579cc7c889f892e05112316c7a38");
+  url.searchParams.set("appid", apiKey || "");
   return new Promise((resolve: (values: Weather) => void, reject) => {
+    if (!apiKey) reject("Nincs API kulcs!");
     fetch(url.toString())
       .then(async (response) => {
         if (response.status === 200) return response.json();

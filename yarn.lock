@@ -8550,9 +8550,9 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"indulasch-react@workspace:.":
+"indulasch-frontend@workspace:.":
   version: 0.0.0-use.local
-  resolution: "indulasch-react@workspace:."
+  resolution: "indulasch-frontend@workspace:."
   dependencies:
     "@testing-library/jest-dom": ^5.11.4
     "@testing-library/react": ^11.1.0

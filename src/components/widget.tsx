@@ -151,7 +151,7 @@ export function WeatherWidget() {
   const [weather, setWeather] = useState<Weather>();
   const [error, setError] = useState<string | undefined>();
   const { getLocation } = useContext<SettingsContextType>(SettingsContext);
-  const openingsApiCall = () => {
+  const weatherApiCall = () => {
     getLocation()
       .then((coords) => {
         getWeatherData(coords)
@@ -166,11 +166,11 @@ export function WeatherWidget() {
       .catch((error) => setError(error.toString()));
   };
   // Interval for 10s and initial API call
+  useInterval(() => {
+    weatherApiCall();
+  }, 30000);
   useEffect(() => {
-    setInterval(() => {
-      openingsApiCall();
-    }, 10000);
-    openingsApiCall();
+    weatherApiCall();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   if (!weather?.main.temp || error) {
