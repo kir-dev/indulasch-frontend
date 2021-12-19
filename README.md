@@ -1,5 +1,6 @@
 # InduláSch web application
 ![Version](https://img.shields.io/github/package-json/v/kir-dev/indulasch-frontend?style=flat-square) ![Issues](https://img.shields.io/github/issues/kir-dev/indulasch-frontend?style=flat-square) 
+
 Progressive web application to display nearby departures and related information for a given location. Powered by the induláSch API and BKK Futár.
 ## Displayed information
 The main profile of the application is displaying nearby public transport departures (works only in Budapest via the official API). There are also other information fields called widgets after the departure list.
