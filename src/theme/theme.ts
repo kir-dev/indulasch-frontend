@@ -1,0 +1,16 @@
+export const colors = {
+  background: "beige",
+  glassWhite: "rgba( 255, 255, 255, 0.50 )",
+  glassDark: "rgba( 50, 50, 50, 0.50 )",
+  glassBeige: "rgba(245, 245, 220, 0.50)",
+  glassBlack: "rgba(0, 0, 0, 0.50)",
+  gray: "gray",
+  black: "black",
+  green: "rgb(0, 120, 0)",
+  lightGreen: "rgb(0, 170, 0)",
+  red: "#E41F18",
+  blue: "#009FE3",
+  darkGray: "rgb(40, 40, 40)",
+  theme: "#52155a",
+  darkTheme: "white",
+};

@@ -1,46 +1,19 @@
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
-
-In the project directory, you can run:
-
-### `yarn start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+# InduláSch web application
+Progressive web application to display nearby departures and related information for a given location. Powered by the induláSch API and BKK Futár.
+## Displayed information
+The main profile of the application is displaying nearby public transport departures (works only in Budapest via the official API). There are also other information fields called widgets after the departure list.
+There is a widget to display the nearest Bubi bike dock, and a widget to display the current weather.
+## Progressive web application
+The UI is designed to suit almost every kind of device. Therefore it is enjoyable on smartphones via a browser and as a progressive web application.
+![induláSch on a smartphone](https://warp.kir-dev.sch.bme.hu/img/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBTdz09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--133cebeeb425a7e39b267eddc354d9759b88b455/iPhone.png)
+## Kiosk mode
+InduláSch at first created for big displays to imitate passenger information systems.
+Therefore a display mode is available, called kiosk mode to display information that is not suitable for mobile devices, but handful for bigger displays.
+One thing that is unique for induláSch is the support of SchPincér, another brilliant project of Kir-Dev.
+Kiosk mode can be accessed by adding a query parameter at the end of the URL.
+`http://localhost:3000/?mode=kiosk`
+In this mode, the settings icon will be hidden, and the settings panel can be accessed by clicking the logo.
+![induláSch kiosk mode](https://warp.kir-dev.sch.bme.hu/img/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBUQT09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--cf52887cf07293ce99f1da21ff656b80bb44025b/TV.png)
+## Widgets
+Widgets are information field at the bottom of the application. Currently, there are 3 widgets available.
+If a widget fails to get data from its source, it will hide itself. SchPincér widget is only available in kiosk mode, and an API key must be added in the settings panel to work.
