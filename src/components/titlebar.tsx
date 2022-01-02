@@ -7,6 +7,7 @@ import {
   SettingsContextType,
 } from "../utils/settings-context";
 import { Clock } from "./clock";
+import { BarContent, BarField } from "./barElements";
 
 export function TitleBar({
   titleBarRef,
@@ -17,14 +18,14 @@ export function TitleBar({
     useContext<SettingsContextType>(SettingsContext);
   return (
     <TitleBarWrapper ref={titleBarRef}>
-      <TitleBarContent>
+      <BarContent>
         <Logo />
-        <TitleBarField>
+        <BarField>
           {locationEnabled && <LocationIcon />}
           {!kioskMode && <SettingsIcon />}
           {kioskMode && <Clock />}
-        </TitleBarField>
-      </TitleBarContent>
+        </BarField>
+      </BarContent>
     </TitleBarWrapper>
   );
 }
@@ -40,20 +41,4 @@ const TitleBarWrapper = styled.div`
   @media (prefers-color-scheme: dark) {
     background-color: ${colors.glassBlack};
   }
-`;
-
-const TitleBarContent = styled.div`
-  width: 90%;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 100%;
-`;
-
-const TitleBarField = styled.div`
-  height: 100%;
-  display: flex;
-  align-items: center;
-  flex-direction: row;
 `;
