@@ -21,8 +21,10 @@ export function Departures({
   const { radius, getLocation, locationEnabled, kioskMode } =
     useContext<SettingsContextType>(SettingsContext);
   let rowLimit = useMemo<number>(() => {
-    return Math.floor(departuresWrapperHeight / fieldHeight);
-  }, [departuresWrapperHeight]);
+    return kioskMode
+      ? Math.floor(departuresWrapperHeight / fieldHeight)
+      : Infinity;
+  }, [kioskMode, departuresWrapperHeight]);
 
   const bkkApiCall = () => {
     getLocation()
@@ -76,7 +78,7 @@ export function Departures({
   }
   return (
     <DeparturesWrapper
-      $height={rowLimit * fieldHeight}
+      $height={departuresWrapperHeight}
       $isFixedHeight={kioskMode}
     >
       {departures.slice(0, rowLimit).map((departure, index) => (
@@ -88,6 +90,7 @@ export function Departures({
 
 const NoDepartureContainer = styled.div`
   height: 60vh;
+  max-height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -97,12 +100,14 @@ const DeparturesWrapper = styled.div<{
   $height: number;
   $isFixedHeight?: boolean;
 }>`
-  ${({ $isFixedHeight, $height }) => $isFixedHeight && `height: ${$height}px;`}
+  ${({ $isFixedHeight, $height }) => $isFixedHeight && `height: ${$height}px;`};
+  min-height: ${({ $height }) => `${$height}px;`};
   width: 100%;
   overflow: auto;
   display: block;
   text-align: center;
   padding-top: 100px;
+  box-sizing: border-box;
   @media (prefers-color-scheme: dark) {
     color: white;
   }

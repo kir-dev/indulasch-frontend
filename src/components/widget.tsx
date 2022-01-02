@@ -42,6 +42,7 @@ export const WidgetArea = styled.div`
   grid-row-gap: 20px;
   flex-direction: row;
   padding-bottom: 20px;
+  box-sizing: border-box;
   @media screen and (max-width: 1200px) {
     grid-template-columns: repeat(2, 1fr);
   }
