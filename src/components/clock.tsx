@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useInterval } from "../utils/use-interval";
 import styled from "styled-components";
+import { colors } from "../theme/theme";
 
 export function Clock() {
   const [time, setTime] = useState<Date>(new Date());
@@ -12,4 +13,7 @@ export function Clock() {
 
 const ClockWrapper = styled.p`
   font-size: 50px;
+  @media (prefers-color-scheme: dark) {
+    color: ${colors.darkTheme};
+  }
 `;
