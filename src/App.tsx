@@ -11,14 +11,17 @@ import {
 import { SettingsProvider } from "./utils/settings-context";
 import { Departures } from "./components/departures";
 import { Settings } from "./components/settings";
+import { Footer } from "./components/footer";
 // import { AlertsDisplay } from "./components/alerts";
 
 function App() {
   const [titleBarHeight, setTitleBarHeight] = useState<number>(0);
   const [widgetAreaHeight, setWidgetAreaHeight] = useState<number>(0);
+  const [footerHeight, setFooterHeight] = useState<number>(0);
   // const [alertDisplayHeight, setAlertDisplayHeight] = useState<number>(0);
   const widgetRef = createRef<HTMLDivElement>();
   const titleBarRef = createRef<HTMLDivElement>();
+  const footerRef = createRef<HTMLDivElement>();
   // const alertsDisplayRef = createRef<HTMLDivElement>();
   useEffect(() => {
     if (titleBarRef?.current) {
@@ -32,6 +35,12 @@ function App() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [widgetRef?.current?.offsetHeight]);
+  useEffect(() => {
+    if (footerRef?.current) {
+      setFooterHeight(footerRef.current.offsetHeight);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [footerRef?.current?.offsetHeight]);
   // useEffect(() => {
   //   if (alertsDisplayRef?.current) {
   //     setAlertDisplayHeight(alertsDisplayRef.current.offsetHeight);
@@ -45,7 +54,11 @@ function App() {
         <Settings />
         <MarginContainer>
           <Departures
-            heightRestriction={(titleBarHeight || 0) + (widgetAreaHeight || 0)}
+            heightRestriction={
+              (titleBarHeight || 0) +
+              (widgetAreaHeight || 0) +
+              (footerHeight || 0)
+            }
           />
           {/*<AlertsDisplay ref={alertsDisplayRef} />*/}
           <WidgetArea ref={widgetRef}>
@@ -54,6 +67,7 @@ function App() {
             <SchPincerWidget />
           </WidgetArea>
         </MarginContainer>
+        <Footer footerRef={footerRef} />
       </SettingsProvider>
     </AppWrapper>
   );
