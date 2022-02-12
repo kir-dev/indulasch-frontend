@@ -50,6 +50,14 @@ export type Weather = {
     all: number;
   };
   dt: number;
+  rain?: {
+    "1h": number;
+    "3h": number;
+  };
+  snow?: {
+    "1h": number;
+    "3h": number;
+  };
   sys: {
     type: number;
     id: number;

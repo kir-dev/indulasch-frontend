@@ -31,6 +31,9 @@ export function Field({ departure }: { departure: Departure }) {
 }
 
 const FieldWrapper = styled.div`
+  :last-of-type {
+    margin-bottom: 0;
+  }
   width: 100%;
   box-sizing: border-box;
   border-radius: 20px;
@@ -39,7 +42,7 @@ const FieldWrapper = styled.div`
   display: grid;
   grid-template-columns: 250px calc(100% - 250px - 20% - 10px) 20%;
   grid-gap: 5px;
-  margin: 20px 0;
+  margin-bottom: 20px;
   @media (prefers-color-scheme: dark) {
     background-color: ${colors.darkGray};
   }

@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { getBubiData, NextBikePlace } from "../utils/nextbike";
 import { Bicycle } from "@styled-icons/bootstrap/Bicycle";
-import { FastFood } from "@styled-icons/ionicons-outline/FastFood";
 import "weather-react-icons/lib/css/weather-icons.css";
 import { WeatherIcon } from "weather-react-icons";
 import { colors } from "../theme/theme";
@@ -34,16 +33,23 @@ const Widget = styled.div`
   }
 `;
 
-export const WidgetArea = styled.div`
+export const WidgetArea = styled.div<{
+  $kioskMode?: boolean;
+  heightRestriction?: number;
+}>`
+  ${({ heightRestriction }) =>
+    heightRestriction &&
+    `max-height:${window.innerHeight - heightRestriction}px;`}
   width: 100%;
+  overflow: auto;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 1fr;
   grid-column-gap: 20px;
   grid-row-gap: 20px;
-  flex-direction: row;
   padding-bottom: 20px;
   box-sizing: border-box;
   @media screen and (max-width: 1200px) {
+    padding-top: 20px;
     grid-template-columns: repeat(2, 1fr);
   }
   @media screen and (max-width: 700px) {
@@ -137,7 +143,6 @@ export function SchPincerWidget() {
   }
   return (
     <Widget>
-      <StyledFastFood />
       <WidgetText>{openings[shownIndex]?.name || "Ismeretlen"}</WidgetText>
       <WidgetText>
         {openings[shownIndex]?.available.toString() || "?"} /{" "}
@@ -187,7 +192,11 @@ export function WeatherWidget() {
           window.matchMedia("(prefers-color-scheme: dark)").matches
         }
       />
-      <WidgetText>{Math.round(weather.main.temp) - 273}°</WidgetText>
+      <WidgetText>
+        {Math.round(weather.main.temp) - 273}°
+        {(weather.snow || weather.rain) &&
+          ` | ${weather.snow?.["1h"] || weather.rain?.["1h"] || 0}mm`}
+      </WidgetText>
     </Widget>
   );
 }
@@ -200,11 +209,6 @@ const StyledBicycle = styled(Bicycle)`
 const StyledWeather = styled(WeatherIcon)`
   height: 120px;
   font-size: 100px;
-  fill: ${colors.theme};
-`;
-
-const StyledFastFood = styled(FastFood)`
-  height: 100px;
   fill: ${colors.theme};
 `;
 

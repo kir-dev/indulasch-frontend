@@ -8,21 +8,17 @@ import {
   WeatherWidget,
   WidgetArea,
 } from "./components/widget";
-import { SettingsProvider } from "./utils/settings-context";
 import { Departures } from "./components/departures";
 import { Settings } from "./components/settings";
 import { Footer } from "./components/footer";
-// import { AlertsDisplay } from "./components/alerts";
 
 function App() {
   const [titleBarHeight, setTitleBarHeight] = useState<number>(0);
   const [widgetAreaHeight, setWidgetAreaHeight] = useState<number>(0);
   const [footerHeight, setFooterHeight] = useState<number>(0);
-  // const [alertDisplayHeight, setAlertDisplayHeight] = useState<number>(0);
   const widgetRef = createRef<HTMLDivElement>();
   const titleBarRef = createRef<HTMLDivElement>();
   const footerRef = createRef<HTMLDivElement>();
-  // const alertsDisplayRef = createRef<HTMLDivElement>();
   useEffect(() => {
     if (titleBarRef?.current) {
       setTitleBarHeight(titleBarRef.current.offsetHeight);
@@ -41,34 +37,32 @@ function App() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [footerRef?.current?.offsetHeight]);
-  // useEffect(() => {
-  //   if (alertsDisplayRef?.current) {
-  //     setAlertDisplayHeight(alertsDisplayRef.current.offsetHeight);
-  //   }
-  // //eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [alertsDisplayRef?.current?.offsetHeight]);
   return (
     <AppWrapper>
-      <SettingsProvider>
-        <TitleBar titleBarRef={titleBarRef} />
-        <Settings />
-        <MarginContainer>
-          <Departures
-            heightRestriction={
-              (titleBarHeight || 0) +
-              (widgetAreaHeight || 0) +
-              (footerHeight || 0)
-            }
-          />
-          {/*<AlertsDisplay ref={alertsDisplayRef} />*/}
-          <WidgetArea ref={widgetRef}>
-            <BubiWidget />
-            <WeatherWidget />
-            <SchPincerWidget />
-          </WidgetArea>
-        </MarginContainer>
-        <Footer footerRef={footerRef} />
-      </SettingsProvider>
+      <TitleBar titleBarRef={titleBarRef} />
+      <Settings />
+      <ContentContainer>
+        <Departures
+          heightRestriction={
+            (titleBarHeight || 0) +
+            ((window.innerWidth < 1200 && widgetAreaHeight) || 0) +
+            (footerHeight || 0)
+          }
+        />
+        <WidgetArea
+          ref={widgetRef}
+          heightRestriction={
+            window.innerWidth > 1200
+              ? (titleBarHeight || 0) + (footerHeight || 0)
+              : undefined
+          }
+        >
+          <BubiWidget />
+          <WeatherWidget />
+          <SchPincerWidget />
+        </WidgetArea>
+      </ContentContainer>
+      <Footer footerRef={footerRef} />
     </AppWrapper>
   );
 }
@@ -89,9 +83,16 @@ const AppWrapper = styled.div`
   }
 `;
 
-const MarginContainer = styled.div`
+const ContentContainer = styled.div`
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-column-gap: 20px;
   width: 90%;
   margin: 0 auto;
+  padding-top: 100px;
+  @media screen and (max-width: 1200px) {
+    display: block;
+  }
 `;
 
 export default App;

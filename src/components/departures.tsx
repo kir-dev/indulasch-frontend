@@ -14,8 +14,9 @@ export function Departures({
 }: {
   heightRestriction: number;
 }) {
-  const fieldHeight = 120;
+  const fieldHeight = 100;
   const departuresWrapperHeight = window.innerHeight - heightRestriction;
+  console.log(departuresWrapperHeight);
   const [departures, setDepartures] = useState<Departure[]>([]);
   const [error, setError] = useState<string | undefined>();
   const { radius, getLocation, locationEnabled, kioskMode } =
@@ -25,6 +26,7 @@ export function Departures({
       ? Math.floor(departuresWrapperHeight / fieldHeight)
       : Infinity;
   }, [kioskMode, departuresWrapperHeight]);
+  console.log(rowLimit);
 
   const bkkApiCall = () => {
     getLocation()
@@ -52,22 +54,18 @@ export function Departures({
 
   if (error) {
     return (
-      <DeparturesWrapper
-        $height={rowLimit * fieldHeight}
-        $isFixedHeight={kioskMode}
-      >
-        <h1>
-          <i>Hiba történt</i>
-        </h1>
+      <DeparturesWrapper $height={rowLimit * fieldHeight}>
+        <NoDepartureContainer>
+          <h1>
+            <i>Hiba történt</i>
+          </h1>
+        </NoDepartureContainer>
       </DeparturesWrapper>
     );
   }
   if (departures.length === 0) {
     return (
-      <DeparturesWrapper
-        $height={rowLimit * fieldHeight}
-        $isFixedHeight={kioskMode}
-      >
+      <DeparturesWrapper $height={rowLimit * fieldHeight}>
         <NoDepartureContainer>
           <h1>
             <i>Nincs indulás</i>
@@ -77,10 +75,7 @@ export function Departures({
     );
   }
   return (
-    <DeparturesWrapper
-      $height={departuresWrapperHeight}
-      $isFixedHeight={kioskMode}
-    >
+    <DeparturesWrapper $height={departuresWrapperHeight}>
       {departures.slice(0, rowLimit).map((departure, index) => (
         <Field key={index} departure={departure} />
       ))}
@@ -98,15 +93,12 @@ const NoDepartureContainer = styled.div`
 
 const DeparturesWrapper = styled.div<{
   $height: number;
-  $isFixedHeight?: boolean;
 }>`
-  ${({ $isFixedHeight, $height }) => $isFixedHeight && `height: ${$height}px;`};
-  min-height: ${({ $height }) => `${$height}px;`};
+  height: ${({ $height }) => `${$height}px;`};
   width: 100%;
   overflow: auto;
   display: block;
   text-align: center;
-  padding-top: 100px;
   box-sizing: border-box;
   @media (prefers-color-scheme: dark) {
     color: white;
