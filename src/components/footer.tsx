@@ -40,10 +40,13 @@ const FooterWrapper = styled.footer`
   }
   a {
     appearance: none;
-    color: white;
+    color: black;
   }
   @media (prefers-color-scheme: dark) {
     color: white;
+    a {
+      color: white;
+    }
   }
 `;
 
