@@ -52,4 +52,5 @@ export const VehicleIcons = {
   CHAIRLIFT: "chairlift",
   SIKLO: "siklo",
   AIRPLANE: "airplane",
+  RAIL: "rail",
 };

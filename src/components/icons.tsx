@@ -8,6 +8,7 @@ import { ReactComponent as AirplaneIcon } from "../assets/icons/airplane.svg";
 import { ReactComponent as FerryIcon } from "../assets/icons/ferry.svg";
 import { ReactComponent as ChairliftIcon } from "../assets/icons/chairlift.svg";
 import { ReactComponent as SikloIcon } from "../assets/icons/siklo.svg";
+import { ReactComponent as MavIcon } from "../assets/icons/mav.svg";
 import { ReactComponent as LogoImage } from "../assets/icons/logo.svg";
 import { ErrorCircle, Cog } from "styled-icons/boxicons-regular";
 import { VehicleIcons } from "../utils/types";
@@ -42,6 +43,8 @@ function VehicleIconSelector(vehicleIcon: string) {
       return <ChairliftIcon />;
     case VehicleIcons.SIKLO:
       return <SikloIcon />;
+    case VehicleIcons.RAIL:
+      return <MavIcon />;
     default:
       return <BusIcon />;
   }
