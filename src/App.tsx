@@ -2,23 +2,24 @@ import React, { createRef, useEffect, useState } from "react";
 import styled from "styled-components";
 import { colors } from "./theme/theme";
 import { TitleBar } from "./components/titlebar";
-import {
-  BubiWidget,
-  SchPincerWidget,
-  WeatherWidget,
-  WidgetArea,
-} from "./components/widget";
+import { WidgetArea } from "./components/widgets/widget";
 import { Departures } from "./components/departures";
 import { Settings } from "./components/settings";
 import { Footer } from "./components/footer";
+import { BubiWidget } from "./components/widgets/bubiWidget";
+import { WeatherWidget } from "./components/widgets/weatherWidget";
+import { SchPincerWidget } from "./components/widgets/schPincerWidget";
+import { Messages } from "./components/messages";
 
 function App() {
   const [titleBarHeight, setTitleBarHeight] = useState<number>(0);
   const [widgetAreaHeight, setWidgetAreaHeight] = useState<number>(0);
   const [footerHeight, setFooterHeight] = useState<number>(0);
+  const [messagesHeight, setMessagesHeight] = useState<number>(0);
   const widgetRef = createRef<HTMLDivElement>();
   const titleBarRef = createRef<HTMLDivElement>();
   const footerRef = createRef<HTMLDivElement>();
+  const messagesRef = createRef<HTMLDivElement>();
   useEffect(() => {
     if (titleBarRef?.current) {
       setTitleBarHeight(titleBarRef.current.offsetHeight);
@@ -37,18 +38,35 @@ function App() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [footerRef?.current?.offsetHeight]);
+  useEffect(() => {
+    if (messagesRef?.current) {
+      setMessagesHeight(messagesRef.current.offsetHeight);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [messagesRef?.current?.offsetHeight]);
+  console.log(messagesHeight);
   return (
     <AppWrapper>
       <TitleBar titleBarRef={titleBarRef} />
       <Settings />
       <ContentContainer>
-        <Departures
+        <DepartureAndMessagesContainer
           heightRestriction={
             (titleBarHeight || 0) +
             ((window.innerWidth < 1200 && widgetAreaHeight) || 0) +
             (footerHeight || 0)
           }
-        />
+        >
+          <Departures
+            heightRestriction={
+              (titleBarHeight || 0) +
+              ((window.innerWidth < 1200 && widgetAreaHeight) || 0) +
+              (footerHeight || 0) +
+              (messagesHeight || 0)
+            }
+          />
+          <Messages messagesRef={messagesRef} />
+        </DepartureAndMessagesContainer>
         <WidgetArea
           ref={widgetRef}
           heightRestriction={
@@ -93,6 +111,15 @@ const ContentContainer = styled.div`
   @media screen and (max-width: 1200px) {
     display: block;
   }
+`;
+
+const DepartureAndMessagesContainer = styled.div<{ heightRestriction: number }>`
+  height: ${({ heightRestriction }) =>
+    `${window.innerHeight - heightRestriction}px;`};
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 `;
 
 export default App;

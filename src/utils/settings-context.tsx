@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useState } from "react";
+import { createContext, ReactNode, useContext, useState } from "react";
 
 const DEFAULT_COORDINATES: Coordinates = {
   lat: 47.473443,
@@ -187,3 +187,6 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     </SettingsContext.Provider>
   );
 }
+
+export const useSettingsContext = () =>
+  useContext<SettingsContextType>(SettingsContext);

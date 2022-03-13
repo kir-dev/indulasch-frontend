@@ -2,10 +2,6 @@ export type ApiResponse = {
   departures: Departure[];
 };
 
-export type AlertApiResponse = {
-  alerts: Alert[];
-};
-
 export type Departure = {
   type: string;
   style: Style;

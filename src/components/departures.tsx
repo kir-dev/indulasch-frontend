@@ -1,13 +1,8 @@
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import styled from "styled-components";
-import { Departure } from "../utils/types";
 import { Field } from "./field";
-import { getDepartures } from "../utils/api";
-import {
-  SettingsContext,
-  SettingsContextType,
-} from "../utils/settings-context";
-import { useInterval } from "../utils/use-interval";
+import { useDepartures } from "../utils/useDepartures";
+import { useSettingsContext } from "../utils/settings-context";
 
 export function Departures({
   heightRestriction,
@@ -16,41 +11,13 @@ export function Departures({
 }) {
   const fieldHeight = 100;
   const departuresWrapperHeight = window.innerHeight - heightRestriction;
-  console.log(departuresWrapperHeight);
-  const [departures, setDepartures] = useState<Departure[]>([]);
-  const [error, setError] = useState<string | undefined>();
-  const { radius, getLocation, locationEnabled, kioskMode } =
-    useContext<SettingsContextType>(SettingsContext);
+  const { departures, error } = useDepartures();
+  const { kioskMode } = useSettingsContext();
   let rowLimit = useMemo<number>(() => {
     return kioskMode
       ? Math.floor(departuresWrapperHeight / fieldHeight)
       : Infinity;
   }, [kioskMode, departuresWrapperHeight]);
-  console.log(rowLimit);
-
-  const bkkApiCall = () => {
-    getLocation()
-      .then((coords) => {
-        getDepartures(coords, radius)
-          .then((response) => {
-            setError(undefined);
-            setDepartures(response.departures);
-          })
-          .catch((error) => {
-            setError(error.toString());
-          });
-      })
-      .catch((err) => {
-        setError(err.toString());
-      });
-  };
-  useInterval(() => {
-    bkkApiCall();
-  }, 10000);
-  useEffect(() => {
-    bkkApiCall();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationEnabled]);
 
   if (error) {
     return (
