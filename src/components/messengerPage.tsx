@@ -65,6 +65,7 @@ const MessageForm = styled.form`
   display: flex;
   align-items: center;
   width: 90%;
+  margin-top: 50px;
   @media screen and (max-width: 800px) {
     flex-direction: column;
   }
@@ -85,12 +86,14 @@ const Trash = styled(TrashAlt)`
 `;
 
 const MessagesContainer = styled.div`
-  grid-column-gap: 10px;
+  grid-gap: 20px;
   display: grid;
   grid-template-columns: auto 60px;
   width: 90%;
   margin: 0 auto;
-  vertical-align: center;
+  > * {
+    margin: 0;
+  }
 `;
 
 const PageTitle = styled.h1`
@@ -104,6 +107,7 @@ const PageTitle = styled.h1`
 const Titlebar = styled(BarContent)`
   padding-top: 20px;
   padding-bottom: 20px;
+  height: auto;
 `;
 
 const Select = styled.select`
