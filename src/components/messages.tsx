@@ -1,37 +1,19 @@
 import styled from "styled-components";
 import { colors } from "../theme/theme";
-import { MessageType, useMessages } from "../utils/useMessages";
-import { RefObject, useState } from "react";
+import { Message, MessageType, useMessages } from "../utils/useMessages";
+import { useState } from "react";
 import { useTimeout } from "../utils/useTimeout";
 import { useSettingsContext } from "../utils/settings-context";
 import { InfoCircle } from "@styled-icons/fa-solid/InfoCircle";
 import { CheckmarkCircle, Warning } from "@styled-icons/fluentui-system-filled";
 import { HomeSmile } from "@styled-icons/boxicons-solid/HomeSmile";
 
-export function Messages({
-  messagesRef,
-}: {
-  messagesRef: RefObject<HTMLDivElement>;
-}) {
+export function Messages() {
   const { messages, error } = useMessages();
   const { kioskMode } = useSettingsContext();
   const [messageIndex, setMessageIndex] = useState<number>(0);
   let message = messages?.[messageIndex];
-  let duration =
-    (message?.text.length * 10 + (messagesRef.current?.offsetWidth || 1000)) /
-    200;
-  let icon = <InfoIcon />;
-  switch (message?.type) {
-    case MessageType.WARNING:
-      icon = <WarningIcon />;
-      break;
-    case MessageType.SUCCESS:
-      icon = <SuccessIcon />;
-      break;
-    case MessageType.FUN:
-      icon = <FunIcon />;
-      break;
-  }
+  let duration = (message?.text.length * 10 + 1000) / 200;
   useTimeout(
     () => {
       if (kioskMode && messages) {
@@ -47,7 +29,31 @@ export function Messages({
   );
   if (!!error || !messages || messages.length === 0 || !kioskMode) return null;
   return (
-    <MessagesWrapper ref={messagesRef} key={message?.id}>
+    <MessageComponent key={message?.id} message={message} duration={duration} />
+  );
+}
+
+export function MessageComponent({
+  message,
+  duration,
+}: {
+  message: Message;
+  duration: number;
+}) {
+  let icon = <InfoIcon />;
+  switch (message?.type) {
+    case MessageType.WARNING:
+      icon = <WarningIcon />;
+      break;
+    case MessageType.SUCCESS:
+      icon = <SuccessIcon />;
+      break;
+    case MessageType.FUN:
+      icon = <FunIcon />;
+      break;
+  }
+  return (
+    <MessagesWrapper>
       {icon}
       <ScrollingTextContainer $duration={duration}>
         <h1>{message?.text}</h1>
@@ -66,7 +72,7 @@ const MessagesWrapper = styled.div`
   grid-column-gap: 10px;
   grid-template-columns: 60px calc(100% - 60px);
   flex-wrap: nowrap;
-  margin: 20px 0;
+  margin-bottom: 20px;
   @media (prefers-color-scheme: dark) {
     background-color: ${colors.darkGray};
   }

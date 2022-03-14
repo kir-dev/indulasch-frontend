@@ -21,13 +21,7 @@ export const Widget = styled.div`
   }
 `;
 
-export const WidgetArea = styled.div<{
-  $kioskMode?: boolean;
-  heightRestriction?: number;
-}>`
-  ${({ heightRestriction }) =>
-    heightRestriction &&
-    `max-height:${window.innerHeight - heightRestriction}px;`}
+export const WidgetArea = styled.div`
   width: 100%;
   overflow: auto;
   display: grid;
@@ -36,8 +30,7 @@ export const WidgetArea = styled.div<{
   grid-row-gap: 20px;
   padding-bottom: 20px;
   box-sizing: border-box;
-  @media screen and (max-width: 1200px) {
-    padding-top: 20px;
+  @media screen and (max-width: 1500px) {
     grid-template-columns: repeat(2, 1fr);
   }
   @media screen and (max-width: 700px) {

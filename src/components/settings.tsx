@@ -14,7 +14,7 @@ type SettingsForm = {
   schpincerApiKey: string;
 };
 
-enum ButtonKinds {
+export enum ButtonKinds {
   PRIMARY = "primary",
   PRIMARY_DANGER = "primaryDanger",
   SECONDARY = "secondary",
@@ -242,7 +242,7 @@ const CheckBoxWrapper = styled.input`
     }
 `;
 
-const Button = styled.button<{ $kind?: ButtonKinds }>`
+export const Button = styled.button<{ $kind?: ButtonKinds }>`
   -webkit-appearance: none;
   border: none;
   cursor: pointer;
@@ -294,7 +294,7 @@ const Button = styled.button<{ $kind?: ButtonKinds }>`
   }
 `;
 
-const TextField = styled.input`
+export const TextField = styled.input`
   -webkit-appearance: none;
   border-radius: 20px;
   width: 300px;
