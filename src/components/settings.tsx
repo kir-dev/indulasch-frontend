@@ -1,8 +1,4 @@
-import { useContext } from "react";
-import {
-  SettingsContext,
-  SettingsContextType,
-} from "../utils/settings-context";
+import { useSettingsContext } from "../utils/settings-context";
 import styled from "styled-components";
 import { colors } from "../theme/theme";
 import { useForm } from "react-hook-form";
@@ -34,7 +30,7 @@ export function Settings() {
     schpincerApiKey,
     setSchpincerApiKey,
     kioskMode,
-  } = useContext<SettingsContextType>(SettingsContext);
+  } = useSettingsContext();
   const defaultValues = {
     lat: staticCoordinates.lat,
     lon: staticCoordinates.lon,
@@ -304,7 +300,7 @@ export const TextField = styled.input`
   border: 1px solid gray;
 `;
 
-const ErrorText = styled.p`
+export const ErrorText = styled.p`
   color: ${colors.red};
   font-weight: bolder;
 `;

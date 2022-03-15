@@ -7,13 +7,18 @@ import { MessageComponent } from "./messages";
 import { TrashAlt } from "@styled-icons/fa-solid/TrashAlt";
 import { colors } from "../theme/theme";
 import { useMessageEdit } from "../utils/useMessageEdit";
-import { Button, ButtonKinds, TextField } from "./settings";
+import { Button, ButtonKinds, ErrorText, TextField } from "./settings";
 import { useForm } from "react-hook-form";
+import { useSettingsContext } from "../utils/settings-context";
 
 export function MessengerPage() {
   const { messages, loading, update } = useMessages();
-  const { remove, create } = useMessageEdit();
-  const { register, handleSubmit } = useForm<Message>();
+  const { remove, create, error } = useMessageEdit();
+  const messageForm = useForm<Message>();
+  const { messengerPassword, setMessengerPassword } = useSettingsContext();
+  const passwordForm = useForm<{ password: string }>({
+    defaultValues: { password: messengerPassword },
+  });
   if (loading) return null;
   return (
     <AppWrapper>
@@ -41,21 +46,36 @@ export function MessengerPage() {
           ))}
         </MessagesContainer>
         <MessageForm
-          onSubmit={handleSubmit((values) => {
+          onSubmit={messageForm.handleSubmit((values) => {
             create(values, update);
           })}
         >
-          <Select {...register("type")}>
+          <Select {...messageForm.register("type")}>
             <option value={MessageType.INFO}>Infó</option>
             <option value={MessageType.WARNING}>Figyelmeztetés</option>
             <option value={MessageType.SUCCESS}>Pipa</option>
             <option value={MessageType.FUN}>Móka</option>
           </Select>
-          <TextField style={{ flex: 1 }} {...register("text")} />
+          <TextField style={{ flex: 1 }} {...messageForm.register("text")} />
           <Button type="submit" $kind={ButtonKinds.PRIMARY}>
             Hozzáadás
           </Button>
         </MessageForm>
+        <MessageForm
+          onSubmit={passwordForm.handleSubmit((values) => {
+            setMessengerPassword(values.password);
+          })}
+        >
+          <h3>Jelszó:</h3>
+          <TextField
+            style={{ flex: 1 }}
+            {...passwordForm.register("password")}
+          />
+          <Button type="submit" $kind={ButtonKinds.PRIMARY}>
+            Mentés
+          </Button>
+        </MessageForm>
+        {error && <ErrorText>{error.toString()}</ErrorText>}
       </Center>
     </AppWrapper>
   );
@@ -68,6 +88,9 @@ const MessageForm = styled.form`
   margin-top: 50px;
   @media screen and (max-width: 800px) {
     flex-direction: column;
+  }
+  @media (prefers-color-scheme: dark) {
+    color: white;
   }
 `;
 
