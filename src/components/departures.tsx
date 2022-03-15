@@ -1,82 +1,25 @@
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import { Departure } from "../utils/types";
 import { Field } from "./field";
-import { getDepartures } from "../utils/api";
-import {
-  SettingsContext,
-  SettingsContextType,
-} from "../utils/settings-context";
-import { useInterval } from "../utils/use-interval";
+import { useDepartures } from "../utils/useDepartures";
 
-export function Departures({
-  heightRestriction,
-}: {
-  heightRestriction: number;
-}) {
-  const fieldHeight = 100;
-  const departuresWrapperHeight = window.innerHeight - heightRestriction;
-  console.log(departuresWrapperHeight);
-  const [departures, setDepartures] = useState<Departure[]>([]);
-  const [error, setError] = useState<string | undefined>();
-  const { radius, getLocation, locationEnabled, kioskMode } =
-    useContext<SettingsContextType>(SettingsContext);
-  let rowLimit = useMemo<number>(() => {
-    return kioskMode
-      ? Math.floor(departuresWrapperHeight / fieldHeight)
-      : Infinity;
-  }, [kioskMode, departuresWrapperHeight]);
-  console.log(rowLimit);
-
-  const bkkApiCall = () => {
-    getLocation()
-      .then((coords) => {
-        getDepartures(coords, radius)
-          .then((response) => {
-            setError(undefined);
-            setDepartures(response.departures);
-          })
-          .catch((error) => {
-            setError(error.toString());
-          });
-      })
-      .catch((err) => {
-        setError(err.toString());
-      });
-  };
-  useInterval(() => {
-    bkkApiCall();
-  }, 10000);
-  useEffect(() => {
-    bkkApiCall();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationEnabled]);
-
-  if (error) {
+export function Departures() {
+  const { departures, error } = useDepartures();
+  // const { kioskMode } = useSettingsContext();
+  if (error || departures.length === 0) {
     return (
-      <DeparturesWrapper $height={rowLimit * fieldHeight}>
+      <DeparturesWrapper>
         <NoDepartureContainer>
           <h1>
-            <i>Hiba történt</i>
-          </h1>
-        </NoDepartureContainer>
-      </DeparturesWrapper>
-    );
-  }
-  if (departures.length === 0) {
-    return (
-      <DeparturesWrapper $height={rowLimit * fieldHeight}>
-        <NoDepartureContainer>
-          <h1>
-            <i>Nincs indulás</i>
+            <i>{error ? "Hiba történt" : "Nincs indulás"}</i>
           </h1>
         </NoDepartureContainer>
       </DeparturesWrapper>
     );
   }
   return (
-    <DeparturesWrapper $height={departuresWrapperHeight}>
-      {departures.slice(0, rowLimit).map((departure, index) => (
+    <DeparturesWrapper>
+      {departures.map((departure, index) => (
         <Field key={index} departure={departure} />
       ))}
     </DeparturesWrapper>
@@ -84,20 +27,20 @@ export function Departures({
 }
 
 const NoDepartureContainer = styled.div`
-  height: 60vh;
   max-height: 100%;
   display: flex;
+  flex: 1;
   align-items: center;
   justify-content: center;
 `;
 
-const DeparturesWrapper = styled.div<{
-  $height: number;
-}>`
-  height: ${({ $height }) => `${$height}px;`};
+const DeparturesWrapper = styled.div`
   width: 100%;
-  overflow: auto;
-  display: block;
+  overflow: hidden;
+  display: flex;
+  flex: 1 1;
+  flex-direction: column;
+  flex-flow: column wrap;
   text-align: center;
   box-sizing: border-box;
   @media (prefers-color-scheme: dark) {

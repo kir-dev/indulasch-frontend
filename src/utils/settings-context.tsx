@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useState } from "react";
+import { createContext, ReactNode, useContext, useState } from "react";
 
 const DEFAULT_COORDINATES: Coordinates = {
   lat: 47.473443,
@@ -12,6 +12,7 @@ const LocalStorageKeys = {
   STATIC_COORDS_LON: "lon",
   RADIUS: "radius",
   SCHPINCER_API_KEY: "schpincer_api_key",
+  MESSENGER_PASSWORD: "messenger_password",
 };
 
 export type Coordinates = {
@@ -42,6 +43,8 @@ export type SettingsContextType = {
   kioskMode: boolean;
   schpincerApiKey: string;
   setSchpincerApiKey: (key: string) => void;
+  messengerPassword: string;
+  setMessengerPassword: (pw: string) => void;
 };
 
 export const SettingsContext = createContext<SettingsContextType>({
@@ -61,6 +64,8 @@ export const SettingsContext = createContext<SettingsContextType>({
   kioskMode: false,
   schpincerApiKey: "",
   setSchpincerApiKey: () => {},
+  messengerPassword: "",
+  setMessengerPassword: () => {},
 });
 
 export function SettingsProvider({ children }: { children: ReactNode }) {
@@ -93,6 +98,10 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
 
   const [schpincerApiKey, setSchpincerApiKeyState] = useState<string>(
     localStorage.getItem(LocalStorageKeys.SCHPINCER_API_KEY) || ""
+  );
+
+  const [messengerPassword, setMessengerPasswordState] = useState<string>(
+    localStorage.getItem(LocalStorageKeys.MESSENGER_PASSWORD) || ""
   );
 
   const setLocationEnabled = (enabled: boolean) => {
@@ -140,6 +149,11 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     setSchpincerApiKeyState(key);
   };
 
+  const setMessengerPassword = (pw: string) => {
+    localStorage.setItem(LocalStorageKeys.MESSENGER_PASSWORD, pw);
+    setMessengerPasswordState(pw);
+  };
+
   const getLocation = () => {
     return new Promise<Coordinates>((resolve, reject) => {
       if (locationEnabled) {
@@ -181,9 +195,14 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
         kioskMode: kioskMode,
         schpincerApiKey: schpincerApiKey,
         setSchpincerApiKey: setSchpincerApiKey,
+        messengerPassword: messengerPassword,
+        setMessengerPassword: setMessengerPassword,
       }}
     >
       {children}
     </SettingsContext.Provider>
   );
 }
+
+export const useSettingsContext = () =>
+  useContext<SettingsContextType>(SettingsContext);

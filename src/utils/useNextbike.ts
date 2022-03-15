@@ -1,5 +1,50 @@
+import { useEffect, useState } from "react";
+import { useSettingsContext } from "./settings-context";
+import { useInterval } from "./useInterval";
+
 const url =
   "https://maps.nextbike.net/maps/nextbike-live.json?city=699&domains=bh";
+
+export function useNextbike() {
+  const [nearest, setNearest] = useState<NextBikePlace>();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>();
+  const { getLocation, radius } = useSettingsContext();
+  const update = () => {
+    setLoading(true);
+    getLocation()
+      .then((coords) => {
+        // Axios had issues with cors
+        getBubiDataFromApi()
+          .then((res) => {
+            let places = res.countries[0].cities[0].places;
+            setNearest(
+              getClosestPlace(
+                places,
+                parseFloat(coords.lat + ""),
+                parseFloat(coords.lon + "")
+              )
+            );
+            setError(undefined);
+          })
+          .catch(() => {
+            setError("Lekérés hiba.");
+          })
+          .finally(() => {
+            setLoading(false);
+          });
+      })
+      .catch(() => {
+        setError("Lokáció hiba.");
+      });
+  };
+
+  useEffect(update, [getLocation, radius]);
+  useInterval(update, 10000);
+
+  return { nearest, loading, error, update };
+}
+
 function getBubiDataFromApi() {
   return new Promise((resolve: (values: NextBikeApi) => void, reject) => {
     fetch(url)
@@ -12,19 +57,6 @@ function getBubiDataFromApi() {
       })
       .catch((e) => {
         reject(e);
-      });
-  });
-}
-
-export function getBubiData({ lat, lon }: { lat: number; lon: number }) {
-  return new Promise((resolve: (value: NextBikePlace) => void, reject) => {
-    getBubiDataFromApi()
-      .then((response) => {
-        let places = response.countries[0].cities[0].places;
-        resolve(getClosestPlace(places, lat, lon));
-      })
-      .catch(() => {
-        reject("Hiba történt!");
       });
   });
 }

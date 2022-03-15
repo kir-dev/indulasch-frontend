@@ -1,6 +1,6 @@
 {
   "name": "indulasch-frontend",
-  "version": "2.2.1",
+  "version": "2.3.0",
   "license": "MIT",
   "author": {
     "name": "Bálint Berente",
@@ -15,11 +15,13 @@
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "@types/styled-components": "^5.1.15",
+    "axios": "^0.26.1",
     "prettier": "^2.4.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-hook-form": "^7.20.2",
     "react-icons-weather": "^1.0.5",
+    "react-router-dom": "^6.2.2",
     "react-scripts": "4.0.3",
     "styled-components": "^5.3.3",
     "styled-icons": "^10.45.0",
