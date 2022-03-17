@@ -99,6 +99,7 @@ const ContentContainer = styled.div<{ height: number }>`
   height: ${({ height }) => `${height}px`};
   margin: 0 auto;
   padding-top: 100px;
+  overflow: auto;
   @media screen and (max-width: 1500px) {
     display: block;
   }
